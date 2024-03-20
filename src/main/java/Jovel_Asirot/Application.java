@@ -29,13 +29,21 @@ public class Application {
 
         EntityManager eM = emf.createEntityManager();
 
-//        Events
         EventDAO eDAO = new EventDAO(eM);
         LocationDAO lDAO = new LocationDAO(eM);
         PersonDAO pDAO = new PersonDAO(eM);
         AttendanceDAO aDAO = new AttendanceDAO(eM);
 
-        Supplier<Event> eventSupplier = getEventSupplier();
+//      People
+        Supplier<Person> personSupplier = getPersonSupplier(aDAO.getAllAttendances());
+        List<Person> peopleList = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            peopleList.add(personSupplier.get());
+        }
+        peopleList.forEach(pDAO::save);
+
+//        Events
+        Supplier<Event> eventSupplier = getEventSupplier(peopleList);
         List<Event> eventList = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
             eventList.add(eventSupplier.get());
@@ -62,15 +70,6 @@ public class Application {
         }
 
 
-//        People
-        Supplier<Person> personSupplier = getPersonSupplier(aDAO.getAllAttendances());
-        List<Person> peopleList = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            peopleList.add(personSupplier.get());
-        }
-        peopleList.forEach(pDAO::save);
-
-
 //        Attendance
         Supplier<Attendance> attendanceSupplier = getAttendanceSupplier(peopleList, eventList);
         for (int i = 0; i < 50; i++) {
@@ -83,7 +82,7 @@ public class Application {
         eM.close();
     }
 
-    public static Supplier<Event> getEventSupplier() {
+    public static Supplier<Event> getEventSupplier(List<Person> people) {
         Random rdm = new Random();
         Faker faker = new Faker();
         TypeEvent[] typeEvents = TypeEvent.values();
@@ -100,7 +99,13 @@ public class Application {
 
             int maxParticipant = rdm.nextInt(10, 50);
 
-            return new Event(title, dateEvent, description, typeEvent, maxParticipant);
+            List<Person> attendees = new ArrayList<>();
+            int numAttendees = rdm.nextInt(people.size());
+            for (int i = 0; i < numAttendees; i++) {
+                attendees.add(people.get(rdm.nextInt(people.size())));
+            }
+
+            return new Event(title, dateEvent, description, typeEvent, maxParticipant, attendees);
         };
     }
 

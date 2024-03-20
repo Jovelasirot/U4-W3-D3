@@ -4,6 +4,8 @@ import enums.TypeEvent;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Event {
@@ -29,17 +31,20 @@ public class Event {
     @JoinColumn(name = "location_id") // Assuming you have a column named location_id in your Event table
     private Location location;
 
+    @Column(name = "attendees")
+    @OneToMany(mappedBy = "event")
+    private List<Attendance> attendees = new ArrayList<>();
+
     public Event() {
     }
 
-    public Event(String title, LocalDate eventDate, String description, TypeEvent typeEvent, int maxParticipant) {
-
+    public Event(String title, LocalDate eventDate, String description, TypeEvent typeEvent, int maxParticipant, List<Person> attendee) {
         this.title = title;
         this.eventDate = eventDate;
         this.description = description;
         this.typeEvent = typeEvent;
         this.maxParticipant = maxParticipant;
-
+        this.attendees = new ArrayList<>();
     }
 
     public long getId() {
@@ -80,6 +85,11 @@ public class Event {
 
     public void setMaxParticipant(int maxParticipant) {
         this.maxParticipant = maxParticipant;
+    }
+
+
+    public void setAttendances(List<Attendance> attendees) {
+        this.attendees = attendees;
     }
 
     @Override

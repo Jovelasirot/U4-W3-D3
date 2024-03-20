@@ -3,6 +3,7 @@ package entities;
 import enums.SateAttendance;
 import jakarta.persistence.*;
 
+
 @Entity
 public class Attendance {
     @Id
@@ -59,6 +60,7 @@ public class Attendance {
     public void setStateAttendance(SateAttendance stateAttendance) {
         this.stateAttendance = stateAttendance;
     }
+
 
     @Override
     public String toString() {
