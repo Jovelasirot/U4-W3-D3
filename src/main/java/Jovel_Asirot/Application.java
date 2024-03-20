@@ -35,26 +35,31 @@ public class Application {
         PersonDAO pDAO = new PersonDAO(eM);
         AttendanceDAO aDAO = new AttendanceDAO(eM);
 
-//        Supplier<Event> eventSupplier = getEventSupplier();
-//        List<Event> eventList = new ArrayList<>();
-//        for (int i = 0; i < 30; i++) {
-//            eventList.add(eventSupplier.get());
-//        }
-//
-//        eventList.forEach(eDAO::save);
+        Supplier<Event> eventSupplier = getEventSupplier();
+        List<Event> eventList = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            eventList.add(eventSupplier.get());
+        }
 
-        List<Event> eventList = eDAO.getAllEvents();
-        eventList.forEach(System.out::println);
+        eventList.forEach(eDAO::save);
 
-
-//        Location
+//        Locations
         Location location1 = new Location("Lucky Pub", "Milan");
         Location location2 = new Location("Bar Nice", "Rome");
         Location location3 = new Location("Cat bar", "Venice");
 
-//        lDAO.save(location1);
-//        lDAO.save(location2);
-//        lDAO.save(location3);
+        lDAO.save(location1);
+        lDAO.save(location2);
+        lDAO.save(location3);
+
+        List<Location> allLocations = lDAO.getAllLocations();
+
+
+        for (Event event : eventList) {
+            int randomIndex = new Random().nextInt(allLocations.size());
+            Location randomLocation = allLocations.get(randomIndex);
+            event.setLocation(randomLocation);
+        }
 
 
 //        People
@@ -72,6 +77,7 @@ public class Application {
             Attendance attendance = attendanceSupplier.get();
             aDAO.save(attendance);
         }
+
 
         emf.close();
         eM.close();

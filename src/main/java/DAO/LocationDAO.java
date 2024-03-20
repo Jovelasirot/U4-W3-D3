@@ -3,6 +3,9 @@ package DAO;
 import entities.Location;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
 
 public class LocationDAO {
     private final EntityManager em;
@@ -17,6 +20,11 @@ public class LocationDAO {
         em.persist(location);
         transaction.commit();
         System.out.println(location.getNameLocation() + " Location saved correctly.");
+    }
+
+    public List<Location> getAllLocations() {
+        TypedQuery<Location> query = em.createQuery("SELECT l FROM Location l", Location.class);
+        return query.getResultList();
     }
 
     public Location findById(long id) {

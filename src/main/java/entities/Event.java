@@ -25,7 +25,9 @@ public class Event {
 
     @Column(name = "max_participant")
     private int maxParticipant;
-
+    @ManyToOne
+    @JoinColumn(name = "location_id") // Assuming you have a column named location_id in your Event table
+    private Location location;
 
     public Event() {
     }
@@ -89,5 +91,9 @@ public class Event {
                 ", typeEvent=" + typeEvent +
                 ", maxParticipant=" + maxParticipant +
                 '}';
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
