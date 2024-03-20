@@ -10,10 +10,10 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false, unique = true)
+    @JoinColumn(name = "person_id", nullable = false)
     private Person person;
     @ManyToOne
-    @JoinColumn(name = "event_id", nullable = false, unique = true)
+    @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
     @Column(name = "state_attendance")

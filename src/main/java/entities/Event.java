@@ -30,8 +30,7 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "location_id") // Assuming you have a column named location_id in your Event table
     private Location location;
-
-    @Column(name = "attendees")
+    
     @OneToMany(mappedBy = "event")
     private List<Attendance> attendees = new ArrayList<>();
 
