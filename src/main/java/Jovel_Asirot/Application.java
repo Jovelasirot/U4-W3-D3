@@ -125,7 +125,6 @@ public class Application {
             int eventsAttended = rdm.nextInt(eventListAttended.size() + 1);
             for (int i = 0; i < eventsAttended; i++) {
                 Attendance attendedEvent = eventListAttended.get(rdm.nextInt(eventListAttended.size()));
-                LocalDate attendanceDate = LocalDate.now().minusDays(rdm.nextInt(30));
                 Attendance attendance = new Attendance(attendedEvent.getPerson(), attendedEvent.getEvent(), SateAttendance.CONFIRMED);
                 attendanceList.add(attendance);
             }
