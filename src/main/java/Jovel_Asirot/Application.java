@@ -1,16 +1,23 @@
 package Jovel_Asirot;
 
+import DAO.AttendanceDAO;
 import DAO.EventDAO;
+import DAO.LocationDAO;
+import DAO.PersonDAO;
 import com.github.javafaker.Faker;
+import entities.Attendance;
 import entities.Event;
+import entities.Location;
 import entities.Person;
 import enums.Gender;
+import enums.SateAttendance;
 import enums.TypeEvent;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
@@ -22,7 +29,11 @@ public class Application {
 
         EntityManager eM = emf.createEntityManager();
 
+//        Events
         EventDAO eDAO = new EventDAO(eM);
+        LocationDAO lDAO = new LocationDAO(eM);
+        PersonDAO pDAO = new PersonDAO(eM);
+        AttendanceDAO aDAO = new AttendanceDAO(eM);
 
 //        Supplier<Event> eventSupplier = getEventSupplier();
 //        List<Event> eventList = new ArrayList<>();
@@ -31,6 +42,36 @@ public class Application {
 //        }
 //
 //        eventList.forEach(eDAO::save);
+
+        List<Event> eventList = eDAO.getAllEvents();
+        eventList.forEach(System.out::println);
+
+
+//        Location
+        Location location1 = new Location("Lucky Pub", "Milan");
+        Location location2 = new Location("Bar Nice", "Rome");
+        Location location3 = new Location("Cat bar", "Venice");
+
+//        lDAO.save(location1);
+//        lDAO.save(location2);
+//        lDAO.save(location3);
+
+
+//        People
+        Supplier<Person> personSupplier = getPersonSupplier(aDAO.getAllAttendances());
+        List<Person> peopleList = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            peopleList.add(personSupplier.get());
+        }
+        peopleList.forEach(pDAO::save);
+
+
+//        Attendance
+        Supplier<Attendance> attendanceSupplier = getAttendanceSupplier(peopleList, eventList);
+        for (int i = 0; i < 50; i++) {
+            Attendance attendance = attendanceSupplier.get();
+            aDAO.save(attendance);
+        }
 
         emf.close();
         eM.close();
@@ -57,7 +98,7 @@ public class Application {
         };
     }
 
-    public static Supplier<Person> getPersonSupplier(List<Event> eventListAttended) {
+    public static Supplier<Person> getPersonSupplier(List<Attendance> eventListAttended) {
         Random rdm = new Random();
         Faker faker = new Faker();
         Gender[] genders = Gender.values();
@@ -74,7 +115,35 @@ public class Application {
             int rdmGender = rdm.nextInt(genders.length);
             Gender gender = genders[rdmGender];
 
+            List<Attendance> attendanceList = new ArrayList<>();
+            int eventsAttended = rdm.nextInt(eventListAttended.size() + 1);
+            for (int i = 0; i < eventsAttended; i++) {
+                Attendance attendedEvent = eventListAttended.get(rdm.nextInt(eventListAttended.size()));
+                LocalDate attendanceDate = LocalDate.now().minusDays(rdm.nextInt(30));
+                Attendance attendance = new Attendance(attendedEvent.getPerson(), attendedEvent.getEvent(), SateAttendance.CONFIRMED);
+                attendanceList.add(attendance);
+            }
+
             return new Person(namePerson, surnamePerson, email, birthDate, gender, eventListAttended);
         };
     }
+
+    public static Supplier<Attendance> getAttendanceSupplier(List<Person> people, List<Event> events) {
+        Random rdm = new Random();
+        SateAttendance[] sateAttendances = SateAttendance.values();
+
+        return () -> {
+            Person randomPerson = people.get(rdm.nextInt(people.size()));
+
+            Event randomEvent = events.get(rdm.nextInt(events.size()));
+
+            LocalDate attendanceDate = LocalDate.now().minusDays(rdm.nextInt(30));
+
+            int rdmStateAttendance = rdm.nextInt(sateAttendances.length);
+            SateAttendance sateAttendance = sateAttendances[rdmStateAttendance];
+
+            return new Attendance(randomPerson, randomEvent, sateAttendance);
+        };
+    }
+
 }

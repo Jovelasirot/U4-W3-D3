@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
+@Entity
 public class Person {
     @Id
     @GeneratedValue
@@ -24,10 +25,10 @@ public class Person {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToMany(mappedBy = "list_attendance")
-    private List<Event> eventAttendedList;
+    @OneToMany(mappedBy = "person")
+    private List<Attendance> eventAttendedList;
 
-    public Person(String name, String surname, String email, LocalDate birthDate, Gender gender, List<Event> eventAttendedList) {
+    public Person(String name, String surname, String email, LocalDate birthDate, Gender gender, List<Attendance> eventAttendedList) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -83,11 +84,11 @@ public class Person {
         this.gender = gender;
     }
 
-    public List<Event> getEventAttendedList() {
+    public List<Attendance> getEventAttendedList() {
         return eventAttendedList;
     }
 
-    public void setEventAttendedList(List<Event> eventAttendedList) {
+    public void setEventAttendedList(List<Attendance> eventAttendedList) {
         this.eventAttendedList = eventAttendedList;
     }
 

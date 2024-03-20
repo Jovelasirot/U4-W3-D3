@@ -26,6 +26,7 @@ public class Event {
     @Column(name = "max_participant")
     private int maxParticipant;
 
+
     public Event() {
     }
 

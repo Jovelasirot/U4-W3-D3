@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.EntityTransaction;
 
+import java.util.List;
+
 public class EventDAO {
     private final EntityManager em;
 
@@ -25,6 +27,11 @@ public class EventDAO {
         Event event = em.find(Event.class, eventId);
         if (event == null) throw new EntityNotFoundException(String.valueOf(eventId));
         return event;
+    }
+
+    public List<Event> getAllEvents() {
+        return em.createQuery("SELECT e FROM Event e", Event.class)
+                .getResultList();
     }
 
     public void deleteById(long eventId) {

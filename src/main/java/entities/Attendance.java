@@ -11,7 +11,7 @@ public class Attendance {
     @ManyToOne
     @JoinColumn(name = "person_id", nullable = false, unique = true)
     private Person person;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "event_id", nullable = false, unique = true)
     private Event event;
 
