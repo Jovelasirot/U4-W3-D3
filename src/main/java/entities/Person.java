@@ -3,6 +3,7 @@ package entities;
 import enums.Gender;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Person {
@@ -17,7 +18,7 @@ public class Person {
     @Column(name = "email")
     private String email;
     @Column(name = "birth_date")
-    private int birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
@@ -26,7 +27,7 @@ public class Person {
     @OneToMany(mappedBy = "list_attendance")
     private List<Event> eventAttendedList;
 
-    public Person(String name, String surname, String email, int birthDate, Gender gender, List<Event> eventAttendedList) {
+    public Person(String name, String surname, String email, LocalDate birthDate, Gender gender, List<Event> eventAttendedList) {
         this.name = name;
         this.surname = surname;
         this.email = email;
@@ -36,6 +37,10 @@ public class Person {
     }
 
     public Person() {
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -62,11 +67,11 @@ public class Person {
         this.email = email;
     }
 
-    public int getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(int birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

@@ -6,9 +6,9 @@ import jakarta.persistence.*;
 @Entity
 public class Attendance {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "person_id", nullable = false, unique = true)
     private Person person;
     @OneToOne
@@ -22,8 +22,7 @@ public class Attendance {
     public Attendance() {
     }
 
-    public Attendance(long id, Person person, Event event, SateAttendance stateAttendance) {
-        this.id = id;
+    public Attendance(Person person, Event event, SateAttendance stateAttendance) {
         this.person = person;
         this.event = event;
         this.stateAttendance = stateAttendance;

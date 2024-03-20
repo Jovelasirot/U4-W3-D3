@@ -22,8 +22,7 @@ public class Location {
     public Location() {
     }
 
-    public Location(long idLocation, String nameLocation, String city) {
-        this.idLocation = idLocation;
+    public Location(String nameLocation, String city) {
         this.nameLocation = nameLocation;
         this.city = city;
     }
