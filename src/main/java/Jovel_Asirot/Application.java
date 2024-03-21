@@ -42,16 +42,7 @@ public class Application {
         }
         peopleList.forEach(pDAO::save);
 
-//        Events
-        Supplier<Event> eventSupplier = getEventSupplier(peopleList);
-        List<Event> eventList = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            eventList.add(eventSupplier.get());
-        }
-
-        eventList.forEach(eDAO::save);
-
-//        Locations
+        //        Locations
         Location location1 = new Location("Lucky Pub", "Milan");
         Location location2 = new Location("Bar Nice", "Rome");
         Location location3 = new Location("Cat bar", "Venice");
@@ -61,6 +52,15 @@ public class Application {
         lDAO.save(location3);
 
         List<Location> allLocations = lDAO.getAllLocations();
+
+//        Events
+        Supplier<Event> eventSupplier = getEventSupplier(allLocations);
+        List<Event> eventList = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            eventList.add(eventSupplier.get());
+        }
+
+        eventList.forEach(eDAO::save);
 
 
         for (Event event : eventList) {
@@ -95,7 +95,7 @@ public class Application {
 
             int rdmTypeEvent = rdm.nextInt(typeEvents.length);
             TypeEvent typeEvent = typeEvents[rdmTypeEvent];
-            
+
             int maxParticipant = rdm.nextInt(10, 50);
 
             Location location = allLocations.get(rdm.nextInt(allLocations.size()));
@@ -142,7 +142,6 @@ public class Application {
 
             Event randomEvent = events.get(rdm.nextInt(events.size()));
 
-            LocalDate attendanceDate = LocalDate.now().minusDays(rdm.nextInt(30));
 
             int rdmStateAttendance = rdm.nextInt(sateAttendances.length);
             SateAttendance sateAttendance = sateAttendances[rdmStateAttendance];
