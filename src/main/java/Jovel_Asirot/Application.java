@@ -82,13 +82,12 @@ public class Application {
         eM.close();
     }
 
-    public static Supplier<Event> getEventSupplier(List<Person> people) {
+    public static Supplier<Event> getEventSupplier(List<Location> allLocations) {
         Random rdm = new Random();
         Faker faker = new Faker();
         TypeEvent[] typeEvents = TypeEvent.values();
 
         return () -> {
-
             String title = faker.esports().event();
             String description = faker.esports().game();
 
@@ -96,16 +95,12 @@ public class Application {
 
             int rdmTypeEvent = rdm.nextInt(typeEvents.length);
             TypeEvent typeEvent = typeEvents[rdmTypeEvent];
-
+            
             int maxParticipant = rdm.nextInt(10, 50);
 
-            List<Person> attendees = new ArrayList<>();
-            int numAttendees = rdm.nextInt(people.size());
-            for (int i = 0; i < numAttendees; i++) {
-                attendees.add(people.get(rdm.nextInt(people.size())));
-            }
+            Location location = allLocations.get(rdm.nextInt(allLocations.size()));
 
-            return new Event(title, dateEvent, description, typeEvent, maxParticipant, attendees);
+            return new Event(title, dateEvent, description, typeEvent, maxParticipant, location);
         };
     }
 

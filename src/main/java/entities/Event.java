@@ -4,7 +4,6 @@ import enums.TypeEvent;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,22 +27,22 @@ public class Event {
     @Column(name = "max_participant")
     private int maxParticipant;
     @ManyToOne
-    @JoinColumn(name = "location_id") // Assuming you have a column named location_id in your Event table
-    private Location location;
-    
+    @JoinColumn(name = "location_id")
+    private Location locationEvent;
+
     @OneToMany(mappedBy = "event")
-    private List<Attendance> attendees = new ArrayList<>();
+    private List<Attendance> attendeesList;
 
     public Event() {
     }
 
-    public Event(String title, LocalDate eventDate, String description, TypeEvent typeEvent, int maxParticipant, List<Person> attendee) {
+    public Event(String title, LocalDate eventDate, String description, TypeEvent typeEvent, int maxParticipant, Location location) {
         this.title = title;
         this.eventDate = eventDate;
         this.description = description;
         this.typeEvent = typeEvent;
         this.maxParticipant = maxParticipant;
-        this.attendees = new ArrayList<>();
+        this.locationEvent = location;
     }
 
     public long getId() {
